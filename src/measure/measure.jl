@@ -39,8 +39,12 @@ function get_delta_energy(
 ) where T <: Int
     score = 0
     changed_districts = update.changed_districts
+    # @show get_log_energy(partition, measure, changed_districts)
+    # @show get_log_energy(partition, measure, changed_districts, update)
+    # @show changed_districts
     score += get_log_energy(partition, measure, changed_districts)
     score -= get_log_energy(partition, measure, changed_districts, update)
+    # @show score, exp(score)
     return exp(score)
 end
 
@@ -59,7 +63,9 @@ function get_log_energy(
             continue
         end
         energy = measure.scores[ii]
-        score += weight*energy(partition, districts; update=update)
+        tmp = energy(partition, districts; update=update)
+        # @show weight, tmp
+        score += weight*tmp#energy(partition, districts; update=update)
     end
     return score
 end

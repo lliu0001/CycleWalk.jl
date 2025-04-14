@@ -11,7 +11,8 @@
             "district": "1",
             "precinct": "Pct 0",
             "boundary_node": true,
-            "boundary_perim": 1,
+            "boundary_perim": 2,
+            "area": 1,
             "id": 0
         },
         {
@@ -23,6 +24,7 @@
             "precinct": "Pct 1",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 1
         },
         {
@@ -34,6 +36,7 @@
             "precinct": "Pct 2",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 2
         },
         {
@@ -44,7 +47,8 @@
             "district": "1",
             "precinct": "Pct 3",
             "boundary_node": true,
-            "boundary_perim": 1,
+            "boundary_perim": 2,
+            "area": 1,
             "id": 3
         },
         {
@@ -56,6 +60,7 @@
             "precinct": "Pct 4",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 4
         },
         {
@@ -67,6 +72,7 @@
             "precinct": "Pct 5",
             "boundary_node": false,
             "boundary_perim": 0,
+            "area": 1,
             "id": 5
         },
         {
@@ -78,6 +84,7 @@
             "precinct": "Pct 6",
             "boundary_node": false,
             "boundary_perim": 0,
+            "area": 1,
             "id": 6
         },
         {
@@ -89,6 +96,7 @@
             "precinct": "Pct 7",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 7
         },
         {
@@ -100,6 +108,7 @@
             "precinct": "Pct 8",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 8
         },
         {
@@ -111,6 +120,7 @@
             "precinct": "Pct 9",
             "boundary_node": false,
             "boundary_perim": 0,
+            "area": 1,
             "id": 9
         },
         {
@@ -122,6 +132,7 @@
             "precinct": "Pct 10",
             "boundary_node": false,
             "boundary_perim": 0,
+            "area": 1,
             "id": 10
         },
         {
@@ -133,6 +144,7 @@
             "precinct": "Pct 11",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 11
         },
         {
@@ -143,7 +155,8 @@
             "district": "4",
             "precinct": "Pct 12",
             "boundary_node": true,
-            "boundary_perim": 1,
+            "boundary_perim": 2,
+            "area": 1,
             "id": 12
         },
         {
@@ -155,6 +168,7 @@
             "precinct": "Pct 13",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 13
         },
         {
@@ -166,6 +180,7 @@
             "precinct": "Pct 14",
             "boundary_node": true,
             "boundary_perim": 1,
+            "area": 1,
             "id": 14
         },
         {
@@ -176,7 +191,8 @@
             "district": "4",
             "precinct": "Pct 15",
             "boundary_node": true,
-            "boundary_perim": 1,
+            "boundary_perim": 2,
+            "area": 1,
             "id": 15
         }
     ],
