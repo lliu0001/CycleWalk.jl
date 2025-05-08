@@ -1,15 +1,9 @@
-#=import Pkg
-codepath = joinpath("/Users/gabrielchuang/Documents/Gabriel/Duke/MultiScaleMapSampler") 
-Pkg.activate("mergeSplit"; shared=true)
-using Revise
-
-Pkg.develop(path=codepath) =#
-
-using MultiScaleMapSampler
+using LiftedTreeWalk
 using Test
 using RandomNumbers
 
 const testdir = dirname(@__FILE__)
+
 
 function is_close(a,b)
     if a > 0.01
@@ -19,105 +13,52 @@ function is_close(a,b)
     end 
 end
 
-function get_observed_districts(
+
+function get_observed_cut_edges(
     graph::MultiLevelGraph, 
     constraints::Dict,
     num_districts::Int, 
-    measure::Measure, 
-    n::Int
+    measure::Measure=Measure(), 
+    cycle_steps::Int=50_000;
+    cycle_walk_frac::Float64 = 0.1,
+    cut_edge_field = "connections"
 )::Dict
     rng = PCG.PCGStateOneseq(UInt64, 1241909)
-    ml_partition = MultiLevelPartition(graph, constraints, num_districts; 
-                                       rng=rng);
-    partition = LinkCutPartition(ml_partition, rng);
+    initial_partition = MultiLevelPartition(graph, constraints, num_districts; 
+                                            rng=rng);
+    partition = LinkCutPartition(initial_partition, rng);
 
-    cycle_walk_frac = 0.1
     cycle_walk = build_lifted_tree_cycle_walk(constraints)
     internal_walk = build_internal_forest_walk(constraints)
     proposal = [(cycle_walk_frac, cycle_walk), 
                 (1.0-cycle_walk_frac, internal_walk)]
-            
-    observed_districts = Dict()
-    for ii = 1:n
-        run_metropolis_hastings!(partition, proposal, measure, 1, rng);
-        district_to_nodes = partition.district_to_nodes
-        for d2n in district_to_nodes
-            if d2n in keys(observed_districts)
-                observed_districts[d2n] += 1
-            else 
-                observed_districts[d2n] = 1 
-            end 
-        end
+         
+    instep = Int(floor(1.0/cycle_walk_frac))
+    edge_cut_counts = Dict{Int64, Int64}()
+    for ii = 1:cycle_steps
+        run_metropolis_hastings!(partition, proposal, measure, instep, rng);
+        cut_edges = get_cut_edge_sum(partition, column=cut_edge_field)
+        edge_cut_counts[cut_edges] = get(edge_cut_counts, cut_edges, 0) + 1
     end
 
-    return observed_districts
+    return edge_cut_counts
 end 
 
-# given observed_districts, mapping districts to frequencies, count_small_square_districts returns the number of 
-# each flavor of districts with population split in (7,9) - 8/8, 7/9 with nub inside, 7/9 with nub outside, respectively. 
-# 
-# . . . .   . . . .   . . . . 
-# . . . .   . . X .   . . . X
-# X X X X   X X X X   X X X X 
-# X X X X   X X X X   X X X X 
-function count_small_square_districts(observed_districts::Dict)::Tuple{Int,Int,Int}
-    c1, c2, c3 = 0, 0, 0
-    middle_square_values = [("0,0", "1,1"), ("0,1", "1,2"), ("1,0","2,1"),("1,1","2,2")]
-
-    for i in keys(observed_districts) 
-        if all([x === nothing for x ∈ values(i)])
-            # 8/8 population split 
-            c1 += observed_districts[i]
-        elseif length(i) == 3 && any([x !== nothing && !(isempty(intersect(middle_square_values, keys(x)))) for x in values(i)])
-            # 9/7 population split, with the nub on the inside 
-            # i.e., if the 9-population district contains one of the middle squares as the only precinct in its county 
-            c2 += observed_districts[i]
-        elseif length(i) == 3
-            # 9/7 population split, with the nub on the outside 
-            c3 += observed_districts[i]
-        end
-    end
-    return c1, c2, c3
-end 
 
 small_square_json = joinpath("test_graphs", "4x4pct_2x2cnty.json")
 small_square_node_data = Set(["county", "pct", "pop", "area", "border_length"])
-small_square_base_graph = BaseGraph(small_square_json, "pop", inc_node_data=small_square_node_data,
-                                    area_col="area",node_border_col="border_length", 
+small_square_base_graph = BaseGraph(small_square_json, "pop", 
+                                    inc_node_data=small_square_node_data,
+                                    area_col="area",
+                                    node_border_col="border_length", 
                                     edge_perimeter_col="length")
-small_square_graph = MultiLevelGraph(small_square_base_graph, ["county", "pct"])
-small_square_dists = 2
+small_square_graph = MultiLevelGraph(small_square_base_graph, ["pct"])
 
-small_2x4_json = joinpath("test_graphs", "grid_graph_4_by_2.json")
-small_2x4_node_data = Set(["county", "node_name", "pop", "area", "border_length"])
-small_2x4_base_graph = BaseGraph(small_2x4_json, "pop", 
-                                 inc_node_data=small_2x4_node_data,
-                                 area_col="area", 
-                                 node_border_col="border_length", 
-                                 edge_perimeter_col="length")
-small_2x4_graph = MultiLevelGraph(small_2x4_base_graph, ["node_name"])
-small_2x4_dists = 2
-
-three_level_json = joinpath("test_graphs", "2x6pct_3level.json")
-three_level_node_data = Set(["county", "subcounty", "pct", "pop", "area", "border_length"])
-three_level_base_graph = BaseGraph(three_level_json, "pop", inc_node_data=three_level_node_data,
-                                    area_col="area",node_border_col="border_length", 
-                                    edge_perimeter_col="length")
-three_level_graph = MultiLevelGraph(three_level_base_graph, ["county", "subcounty", "pct"])
-three_level_dists = 2
 
 tests = [
-    "small_2x4_2counties_weighted_g0"
-    # "small_square_g1_p88", #small square graph, gamma=1, population=(8,8)
-    # "small_square_g0_p79", #small square graph, gamma=0, population=(7,9)
-    # "small_square_g1_p79", #small square graph, gamma=1, population=(7,9)
-    # "small_square_g1_p79_compactness", #small square graph, gamma=1, population=(7,9), compactness_weight=0.5 
-    # "small_square_g1_p79_SNF", #small square graph, gamma=1, population=(7,9), single node flip
-    # "three_level_g1_p66", #3-level graph, gamma=1, population=(6,6)
-    # "three_level_g0_p57", #3-level graph, gamma=0, population=(5,7)
-    # "three_level_g1_p57", #3-level graph, gamma=1, population=(5,7)
-    # "three_level_g1_p57_compactness", #3-level graph, gamma=1, population=(5,7), compactness_weight=0.5 
-    # "three_level_g1_p57_SNF" # single node flip (very basic check only)
+    "small_square_p88_unweighted", 
+    "small_square_p88_weighted", 
+    "small_square_p88_polsby_popper", 
     ]
 
 for t in tests
