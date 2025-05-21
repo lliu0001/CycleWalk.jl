@@ -6,7 +6,7 @@ end
 struct BaseGraph
     num_nodes::Int
     num_edges::Int
-    total_pop::Int
+    total_pop::Real
     #
     pop_col::String
     bpop_col::Union{String,Nothing}

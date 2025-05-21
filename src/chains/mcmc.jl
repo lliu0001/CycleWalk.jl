@@ -5,7 +5,6 @@ function run_metropolis_hastings!(
     measure::Measure,
     steps::Union{Int,Tuple{Int,Int}},
     rng::AbstractRNG;
-    # pind_to_vals::Dict;
     writer::Union{Writer, Nothing}=nothing,
     output_freq::Int=250,
     run_diagnostics::RunDiagnostics=RunDiagnostics()
@@ -30,25 +29,12 @@ function run_metropolis_hastings!(
             end
             continue
         end
-        de = get_delta_energy(partition, measure, update)
-        p *= de # get_delta_energy(partition, measure, update)
+        p *= get_delta_energy(partition, measure, update)
 
         update_acceptance_ratio_diagnostic!(proposal_diagnostics, p)
 
-        # cut_edges = get_cut_edge_sum(partition)
-        # isoperimetric_score = get_isoperimetric_score(partition)
-        # # @show isoperimetric_score, de
-        # k = (cut_edges, get_cut_edge_list(partition))
-        # if haskey(pind_to_vals, k)
-        #     @assert pind_to_vals[k]≈isoperimetric_score
-        # else
-        #     pind_to_vals[k]=isoperimetric_score
-        # end
         if rand(rng) < p
-        # @show de
-        # @show partition.node_to_dist
             update_partition!(partition, update)
-        # @show partition.node_to_dist
         end
         if mod(step, output_freq) == 0 && step != initial_step
             output(partition, measure, step, 0, writer, run_diagnostics)
