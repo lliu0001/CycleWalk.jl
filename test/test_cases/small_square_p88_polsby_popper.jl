@@ -116,7 +116,7 @@ name = "small square test graph (polsby-popper), 4 districts, pop=8, gamma∈{0,
     push_energy!(measure, get_isoperimetric_score, iso_weight) 
 
     observed_cuts = get_observed_cut_edges(modified_graph, constraints, 4,
-                                           measure)
+                                           measure, 100_000)
 
     # check that the observed districts cut counts are correct 
     @test length(values(observed_cuts)) == 4
