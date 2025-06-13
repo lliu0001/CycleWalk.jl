@@ -1,4 +1,4 @@
-using LiftedTreeWalk
+using CycleWalk
 using Test
 using RandomNumbers
 
@@ -18,8 +18,8 @@ function get_observed_cut_edges(
     graph::MultiLevelGraph, 
     constraints::Dict,
     num_districts::Int, 
-    measure::Measure=Measure(), 
-    cycle_steps::Int=50_000;
+    measure::Measure=Measure();
+    cycle_steps::Int=50_000,
     cycle_walk_frac::Float64 = 0.1,
     cut_edge_field = "connections"
 )::Dict

@@ -22,7 +22,7 @@ function run_metropolis_hastings!(
         proposal_diagnostics = get_proposal_diagnostics(run_diagnostics, 
                                                         proposal!)
         p, update = proposal!(partition, rng, diagnostics=proposal_diagnostics)
-        
+        # p = 1
         if p == 0
             if mod(step, output_freq) == 0 && step != initial_step
                 output(partition, measure, step, 0, writer, run_diagnostics)
@@ -79,11 +79,20 @@ function update_partition!(
         link!(partition.lct.nodes[link[1]], partition.lct.nodes[link[2]])
     end
 
+    distPair = update.changed_districts
     new_roots = (find_root!(partition.lct.nodes[update.cuts[1][1]]),
                  find_root!(partition.lct.nodes[update.cuts[1][2]]))
+    # swap if needed
+    l11node = partition.lct.nodes[update.links[1][1]]
+    l11dist_cur = partition.node_to_dist[update.links[1][1]]
+    r11_new = find_root!(l11node)
+    r11_root_ind_new = (r11_new != new_roots[1]) + 1
+    r11_root_ind_cur = (l11dist_cur != distPair[1]) + 1
+    if (r11_root_ind_new == r11_root_ind_cur) ⊻ update.swap_link11
+        new_roots = (new_roots[2], new_roots[1])
+    end
     # @show [n.vertex for n in new_roots]
 
-    distPair = update.changed_districts
 
     # modify roots
     old_root1 = partition.district_roots[distPair[1]]

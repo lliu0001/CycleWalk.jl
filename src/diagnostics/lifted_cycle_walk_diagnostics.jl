@@ -6,7 +6,8 @@ function gather_lifted_cycle_walk_diagnostics!(
     dist_pair::Union{Nothing, Tuple}=nothing,
     edge_pair::Union{Nothing, Tuple}=nothing,
     edge_inds::Union{Nothing, Tuple}=nothing,
-    partition::Union{Nothing, LinkCutPartition}=nothing
+    partition::Union{Nothing, LinkCutPartition}=nothing,
+    swap_data=Union{Nothing, Tuple{Int, Bool}}
 ) where T <: Real
     diagnostics === nothing && return
 

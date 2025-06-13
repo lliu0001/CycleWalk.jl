@@ -1,4 +1,4 @@
-module LiftedTreeWalk
+module CycleWalk
 using JSON
 using SimpleWeightedGraphs
 using DataStructures:

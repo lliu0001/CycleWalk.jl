@@ -44,7 +44,7 @@ function get_collapsed_cycle_weights(
     vPath::Vector{Node}, 
     partition::LinkCutPartition;
     field=partition.graph.pop_col
-)
+)::Vector{Float64}
     uPath_rev = reverse(uPath)
     u1 = partition.lct.nodes[uPath[1].vertex]
     v1 = partition.lct.nodes[vPath[1].vertex]
@@ -177,7 +177,8 @@ function find_proposal_prob_ratio!(
     cuts::Vector{Vector{T}},
     sum_edge_weight_products::Float64,
     w1w2_cuts_inv::Float64,
-    w1w2_links_inv::Float64
+    w1w2_links_inv::Float64,
+    swap_link11::Bool
 ) where T <: Int
     for cut in cuts
         cut!(partition.lct.nodes[cut[2]])
@@ -190,10 +191,20 @@ function find_proposal_prob_ratio!(
     end
 
     # @show partition.district_roots
+    cut11_dist_init = partition.node_to_dist[cuts[1][1]]
     new_roots = (find_root!(partition.lct.nodes[cuts[1][1]]),
                  find_root!(partition.lct.nodes[cuts[1][2]]))
     # @show [n.vertex for n in new_roots]
     # @show partition.district_roots
+    # swap if needed
+    l11node = partition.lct.nodes[links[1][1]]
+    l11dist_cur = partition.node_to_dist[links[1][1]]
+    r11_new = find_root!(l11node)
+    r11_root_ind_new = (r11_new != new_roots[1]) + 1
+    r11_root_ind_cur = (l11dist_cur != distPair[1]) + 1
+    if (r11_root_ind_new == r11_root_ind_cur) ⊻ swap_link11
+        new_roots = (new_roots[2], new_roots[1])
+    end
 
     # modify roots
     old_root1 = partition.district_roots[distPair[1]]
@@ -266,6 +277,62 @@ function get_log_tree_count_ratio(
     return log_tree_count_ratio
 end
 
+function get_link_path_ind(
+    link_ind::T, 
+    uPath::Vector{Node}, 
+    vPath::Vector{Node}
+)::T where T <: Int
+    if uPath[end].vertex == link_ind
+        return 1
+    elseif uPath[1].vertex == link_ind
+        return length(uPath)
+    elseif vPath[end].vertex == link_ind
+        return length(uPath) + length(vPath)
+    elseif vPath[1].vertex == link_ind
+        return length(uPath)+1
+    else
+        throw("Couldn't find link11 index in appropriate spot")
+    end
+end
+
+function swap_assignment_check(
+    path_ind::T, 
+    edge_inds::Tuple{T,T}, 
+    uPath::Vector{Node}, 
+    vPath::Vector{Node}, 
+    cycle_weights::Vector{Float64}
+)::Bool where T <: Int
+    # edge_inds interval assigned to u district?
+    overlap1 = 0
+    tot_pop = sum(cycle_weights)
+    if edge_inds[1] <= length(uPath)
+        overlap1 += sum(cycle_weights[edge_inds[1]:min(
+                                                   length(uPath),edge_inds[2])])
+    elseif edge_inds[1] > length(uPath)+1
+        overlap1 += sum(cycle_weights[length(uPath)+1:edge_inds[1]-1])
+    end
+    if edge_inds[2] < length(cycle_weights)
+        overlap1 += sum(cycle_weights[max(length(uPath)+1, edge_inds[2]+1):end])
+    end
+    # overlap2 = tot_pop - overlap1
+    uPathToInterval = (2*overlap1 > tot_pop) # overlap1 > overlap2
+    @show overlap1, tot_pop, tot_pop-overlap1
+
+    l11_in_interval = (edge_inds[1] <= path_ind <= edge_inds[2])
+    l11_in_uPath = (path_ind <= length(uPath))
+    @show l11_in_interval, l11_in_uPath, uPathToInterval
+
+    return (l11_in_uPath ⊻ l11_in_interval) ⊻ !uPathToInterval
+    # l11_in_uPath && l11_in_interval && uPathToInterval -> false
+    # l11_in_uPath && !l11_in_interval && uPathToInterval -> true
+    # !l11_in_uPath && l11_in_interval && uPathToInterval -> true
+    # !l11_in_uPath && !l11_in_interval && uPathToInterval -> f
+    # l11_in_uPath && l11_in_interval && !uPathToInterval -> t
+    # l11_in_uPath && !l11_in_interval && !uPathToInterval -> f
+    # !l11_in_uPath && l11_in_interval && !uPathToInterval -> f
+    # !l11_in_uPath && !l11_in_interval && !uPathToInterval -> t
+end
+
 function lifted_tree_cycle_walk!(
     partition::LinkCutPartition,
     constraints::Dict{Type{T} where T<:AbstractConstraint, AbstractConstraint},
@@ -319,20 +386,25 @@ function lifted_tree_cycle_walk!(
     w1w2_links_inv = 1.0/(graph.weights[src(edge_pair[1]), dst(edge_pair[1])]*
                           graph.weights[src(edge_pair[2]), dst(edge_pair[2])])
 
+    path_ind_l11 = get_link_path_ind(links[1][1], uPath, vPath)
+    swap_link11 = swap_assignment_check(path_ind_l11, edge_inds, uPath, vPath, 
+                                        cycle_weights)
+
     p, new_cross_d_edg = find_proposal_prob_ratio!(partition, distPair, links, 
                                                    cuts, 
                                                    cum_edge_weight_product[end],
                                                    w1w2_cuts_inv,
-                                                   w1w2_links_inv)
+                                                   w1w2_links_inv, 
+                                                   swap_link11)
 
     gather_lifted_cycle_walk_diagnostics!(diagnostics; accept_ratio=p,
                                           cycle_weights=cycle_weights, 
                                           dist_pair=distPair,
                                           edge_pair=edge_pair, 
                                           edge_inds=edge_inds,
-                                          partition=partition
-        )
-    return p, Update(distPair, links, cuts, new_cross_d_edg)
+                                          partition=partition,
+                                          swap_data=(path_ind_l11, swap_link11))
+    return p, Update(distPair, links, cuts, new_cross_d_edg, swap_link11)
 end
 
 """"""
