@@ -194,7 +194,6 @@ function find_proposal_prob_ratio!(
     cut11_dist_init = partition.node_to_dist[cuts[1][1]]
     new_roots = (find_root!(partition.lct.nodes[cuts[1][1]]),
                  find_root!(partition.lct.nodes[cuts[1][2]]))
-    # @show [n.vertex for n in new_roots]
     # @show partition.district_roots
     # swap if needed
     l11node = partition.lct.nodes[links[1][1]]
@@ -202,7 +201,7 @@ function find_proposal_prob_ratio!(
     r11_new = find_root!(l11node)
     r11_root_ind_new = (r11_new != new_roots[1]) + 1
     r11_root_ind_cur = (l11dist_cur != distPair[1]) + 1
-    if (r11_root_ind_new == r11_root_ind_cur) ⊻ swap_link11
+    if !((r11_root_ind_new == r11_root_ind_cur) ⊻ swap_link11)
         new_roots = (new_roots[2], new_roots[1])
     end
 
@@ -314,13 +313,13 @@ function swap_assignment_check(
     if edge_inds[2] < length(cycle_weights)
         overlap1 += sum(cycle_weights[max(length(uPath)+1, edge_inds[2]+1):end])
     end
-    # overlap2 = tot_pop - overlap1
-    uPathToInterval = (2*overlap1 > tot_pop) # overlap1 > overlap2
-    @show overlap1, tot_pop, tot_pop-overlap1
+    # note: overlap2 = tot_pop - overlap1 and check is overlap1 > overlap2?
+    uPathToInterval = (2*overlap1 > tot_pop) 
+    # @show overlap1, tot_pop, tot_pop-overlap1
 
     l11_in_interval = (edge_inds[1] <= path_ind <= edge_inds[2])
     l11_in_uPath = (path_ind <= length(uPath))
-    @show l11_in_interval, l11_in_uPath, uPathToInterval
+    # @show l11_in_interval, l11_in_uPath, uPathToInterval
 
     return (l11_in_uPath ⊻ l11_in_interval) ⊻ !uPathToInterval
     # l11_in_uPath && l11_in_interval && uPathToInterval -> false
