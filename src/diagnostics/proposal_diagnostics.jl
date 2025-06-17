@@ -69,49 +69,6 @@ end
 
 ##############################
 
-""""""
-function push_delta_node_diagnostic!(
-    del_node_diag::DeltaNodesDiagnostic,
-    dist_pair::Union{Nothing, Tuple}=nothing,
-    edge_pair::Union{Nothing, Tuple}=nothing,
-    edge_inds::Union{Nothing, Tuple}=nothing,
-    partition::Union{Nothing, LinkCutPartition}=nothing
-)
-    if (dist_pair === nothing || edge_pair === nothing || 
-        edge_inds === nothing || partition === nothing)
-        push!(del_node_diag.data_vec, 0)
-        return
-    end
-
-    uPath, vPath = get_paths!(partition, edge_pair)
-    branch_nodes = get_collapsed_cycle_weights(uPath, vPath, partition; 
-                                               field=nothing)
-    evert!(partition.lct.nodes[partition.district_roots[dist_pair[1]]])
-    evert!(partition.lct.nodes[partition.district_roots[dist_pair[2]]])
-
-    init_c = length(uPath)
-    initial_cut = (1, length(uPath))
-    proposed_cut = edge_inds
-
-    to1 = min(init_c, proposed_cut[2])+1
-    from1 = max(init_c, proposed_cut[2])
-    to2 = min(init_c, proposed_cut[1])+1
-    from2 = max(init_c, proposed_cut[1])
-    delta_nodes1 = sum(branch_nodes[1:proposed_cut[1]-1]) + 
-                   sum(branch_nodes[to1:from1])
-    delta_nodes2 = sum(branch_nodes[to2:from2]) + 
-                   sum(branch_nodes[proposed_cut[2]+1:end])
-    delta_nodes = min(delta_nodes1, delta_nodes2)
-    push!(del_node_diag.data_vec, delta_nodes)
-end
-
-""""""
-function reset_diagnostic!(del_node_diag::DeltaNodesDiagnostic)
-    resize!(del_node_diag.data_vec, 0)
-end
-
-##############################
-
 
 """"""
 function reset_diagnostics!(

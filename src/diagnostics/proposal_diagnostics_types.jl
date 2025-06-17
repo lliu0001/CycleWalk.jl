@@ -30,16 +30,3 @@ function CycleLengthDiagnostic()
 end
 
 
-""""""
-struct DeltaNodesDiagnostic <: AbstractProposalDiagnostics
-    data_vec::Vector{Int64}
-end
-
-
-""""""
-function DeltaNodesDiagnostic()
-    data_vec = Vector{Int64}(undef, 0)
-    return DeltaNodesDiagnostic(data_vec)
-end
-
-

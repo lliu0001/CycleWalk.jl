@@ -201,7 +201,7 @@ function find_proposal_prob_ratio!(
     r11_new = find_root!(l11node)
     r11_root_ind_new = (r11_new != new_roots[1]) + 1
     r11_root_ind_cur = (l11dist_cur != distPair[1]) + 1
-    if !((r11_root_ind_new == r11_root_ind_cur) ⊻ swap_link11)
+    if (r11_root_ind_new == r11_root_ind_cur) ⊻ !swap_link11
         new_roots = (new_roots[2], new_roots[1])
     end
 
@@ -401,8 +401,10 @@ function lifted_tree_cycle_walk!(
                                           dist_pair=distPair,
                                           edge_pair=edge_pair, 
                                           edge_inds=edge_inds,
-                                          partition=partition,
-                                          swap_data=(path_ind_l11, swap_link11))
+                                          edge_pair_inds=edge_pair_inds,
+                                          swap_data=(path_ind_l11, swap_link11),
+                                          len_uPath=length(uPath),
+                                          partition=partition)
     return p, Update(distPair, links, cuts, new_cross_d_edg, swap_link11)
 end
 

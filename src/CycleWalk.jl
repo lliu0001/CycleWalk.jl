@@ -45,6 +45,8 @@ export AbstractGraph,
     AcceptanceRatios,
     CycleLengthDiagnostic,
     DeltaNodesDiagnostic,
+    DeltaPopDiagnostic,
+    CuttableEdgePairsDiagnostic,
     push_diagnostic!,
 
     # Writer
@@ -134,6 +136,9 @@ include("./measure/energy/performant_vra_dists.jl")
 # include("./measure/energy/vap_frac.jl")
 include("./diagnostics/proposal_diagnostics.jl")
 include("./diagnostics/lifted_cycle_walk_diagnostics.jl")
+include("./diagnostics/delta_population.jl")
+include("./diagnostics/delta_nodes.jl")
+include("./diagnostics/cuttable_edge_pairs.jl")
 
 include("./observables/node_counts.jl")
 

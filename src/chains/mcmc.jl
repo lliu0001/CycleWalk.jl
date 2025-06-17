@@ -87,7 +87,7 @@ function update_partition!(
     r11_new = find_root!(l11node)
     r11_root_ind_new = (r11_new != new_roots[1]) + 1
     r11_root_ind_cur = (l11dist_cur != distPair[1]) + 1
-    if !((r11_root_ind_new == r11_root_ind_cur) ⊻ update.swap_link11)
+    if (r11_root_ind_new == r11_root_ind_cur) ⊻ !update.swap_link11
         new_roots = (new_roots[2], new_roots[1])
     end
 
