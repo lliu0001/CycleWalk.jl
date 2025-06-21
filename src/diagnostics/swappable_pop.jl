@@ -1,11 +1,11 @@
 """"""
 struct MaxSwappablePopulationDiagnostic <: AbstractProposalDiagnostics
-    data_vec::Vector{Int64}
+    data_vec::Vector{Float64}
 end
 
 """"""
 function MaxSwappablePopulationDiagnostic()
-    data_vec = Vector{Int64}(undef, 0)
+    data_vec = Vector{Float64}(undef, 0)
     return MaxSwappablePopulationDiagnostic(data_vec)
 end
 
@@ -42,9 +42,9 @@ function push_swappable_pop_diagnostic!(
 
     max_swap = 0
     avg_swap = 0
+    tot_pop = sum(cycle_weights)
     for (e1, e2) in edge_pair_inds
         pop_swap1 = 0
-        tot_pop = sum(cycle_weights)
         if e1 <= len_uPath
             pop_swap1 += sum(cycle_weights[e1:min(len_uPath,e2)])
         elseif e1 > len_uPath+1

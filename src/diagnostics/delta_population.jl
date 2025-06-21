@@ -1,11 +1,11 @@
 """"""
 struct DeltaPopDiagnostic <: AbstractProposalDiagnostics
-    data_vec::Vector{Int64}
+    data_vec::Vector{Float64}
 end
 
 """"""
 function DeltaPopDiagnostic()
-    data_vec = Vector{Int64}(undef, 0)
+    data_vec = Vector{Float64}(undef, 0)
     return DeltaPopDiagnostic(data_vec)
 end
 
@@ -46,7 +46,7 @@ function push_delta_pop_diagnostic!(
     elseif (l11_cur ⊻ l11_proposed) ⊻ !swap_link11
         delta_pop = tot_pop-overlap1
     end
-    push!(del_pop_diag.data_vec, delta_pop)
+    push!(del_pop_diag.data_vec, delta_pop/tot_pop)
 end
 
 """"""
