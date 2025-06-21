@@ -47,6 +47,9 @@ export AbstractGraph,
     DeltaNodesDiagnostic,
     DeltaPopDiagnostic,
     CuttableEdgePairsDiagnostic,
+    UniqueCuttableEdgesDiagnostic,
+    MaxSwappablePopulationDiagnostic,
+    AvgSwappablePopulationDiagnostic,
     push_diagnostic!,
 
     # Writer
@@ -139,6 +142,8 @@ include("./diagnostics/lifted_cycle_walk_diagnostics.jl")
 include("./diagnostics/delta_population.jl")
 include("./diagnostics/delta_nodes.jl")
 include("./diagnostics/cuttable_edge_pairs.jl")
+include("./diagnostics/unique_cuttable_edges.jl")
+include("./diagnostics/swappable_pop.jl")
 
 include("./observables/node_counts.jl")
 

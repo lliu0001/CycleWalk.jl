@@ -40,6 +40,25 @@ function gather_lifted_cycle_walk_diagnostics!(
         push_cuttable_edge_pairs_diagnostic!(diagnostic, edge_pair_inds)
     end
 
+    if haskey(diagnostics, UniqueCuttableEdgesDiagnostic)
+        diagnostic = diagnostics[UniqueCuttableEdgesDiagnostic]
+        push_unique_cuttable_edges_diagnostic!(diagnostic, edge_pair_inds,
+                                               length(cycle_weights), len_uPath)
+    end
+
+    if (haskey(diagnostics, MaxSwappablePopulationDiagnostic) ||
+        haskey(diagnostics, AvgSwappablePopulationDiagnostic))
+        max_diag = nothing 
+        avg_diag = nothing
+        if haskey(diagnostics, MaxSwappablePopulationDiagnostic)
+            max_diag = diagnostics[MaxSwappablePopulationDiagnostic]
+        end
+        if haskey(diagnostics, AvgSwappablePopulationDiagnostic)
+            avg_diag = diagnostics[AvgSwappablePopulationDiagnostic]
+        end
+        push_swappable_pop_diagnostic!(max_diag, avg_diag, edge_pair_inds,
+                                       cycle_weights, len_uPath)
+    end
 
 
 end
