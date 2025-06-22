@@ -42,6 +42,10 @@ function gather_lifted_cycle_walk_diagnostics!(
 
     if haskey(diagnostics, UniqueCuttableEdgesDiagnostic)
         diagnostic = diagnostics[UniqueCuttableEdgesDiagnostic]
+        len_cycleWeights = nothing 
+        if cycle_weights !== nothing
+            len_cycleWeights = length(cycle_weights)
+        end 
         push_unique_cuttable_edges_diagnostic!(diagnostic, edge_pair_inds,
                                                length(cycle_weights), len_uPath)
     end
