@@ -22,8 +22,8 @@ function run_chain!(
 	try
 		run_metropolis_hastings!(partition, chain.proposal, chain.measure, steps, 
 			                     chain.rng, writer=chain.writer)
-		return 0, chain.measure.gamma
+		return 0, chain.measure
 	catch e
-		return 1, chain.measure.gamma
+		return 1, chain.measure
 	end
 end

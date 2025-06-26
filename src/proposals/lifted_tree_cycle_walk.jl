@@ -405,7 +405,9 @@ function lifted_tree_cycle_walk!(
                                           swap_data=(path_ind_l11, swap_link11),
                                           len_uPath=length(uPath),
                                           partition=partition)
+    # partition.update_index += 1
     return p, Update(distPair, links, cuts, new_cross_d_edg, swap_link11)
+                     # partition.update_identifier+1)
 end
 
 """"""

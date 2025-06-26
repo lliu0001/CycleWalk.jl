@@ -126,11 +126,14 @@ function get_isoperimetric_scores(
     else
         areas = iso_data.areas_update
         perimeters = iso_data.perimeters_update
-        areas .= 0
-        perimeters .= 0
-        for di in districts
-            set_areas_and_perimeters!(partition, di, update)
-        end
+        # if partition.update_identifier != update.identifier
+            areas .= 0
+            perimeters .= 0
+            for di in districts
+                set_areas_and_perimeters!(partition, di, update)
+            end
+        # end
+        # update.identifier = partition.update_identifier
     end
 
     for (ii, di) in enumerate(districts)

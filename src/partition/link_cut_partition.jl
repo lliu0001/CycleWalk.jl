@@ -11,6 +11,7 @@ mutable struct LinkCutPartition <: AbstractPartition
     node_col::String
     graph::BaseGraph
     identifier::Int64
+    # update_identifier::Int64
 end
 
 """"""
@@ -43,12 +44,13 @@ function LinkCutPartition(
     energy_data = Dict{Union{DataType, Tuple{DataType, Tuple}}, 
                        AbstractEnergyData}()
     
+    identifier = rand(rng, typemin(Int64):0)
     lcp = LinkCutPartition(partition.num_dists, 
                            Dict{Tuple{Int64,Int64}, Set{SimpleWeightedEdge}}(),
                            district_roots, roots_to_district, energy_data,
                            node_to_dist, node_to_dist_update, lct,
                            partition.graph.levels[1], base_graph,
-                           rand(rng, typemin(Int64):0))
+                           identifier)#, identifier)
     assign_district_map!(lcp)
     find_cross_district_edges!(lcp)
     return lcp

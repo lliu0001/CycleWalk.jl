@@ -23,8 +23,10 @@ function Writer(
     # proposal_diagnostics::Dict=Dict()
 )
     graph = partition.graph
-    atlasParam=AtlasParam("energies"=>measure.descriptions,
-                          "energy weights"=>measure.weights,
+    scores = collect(measure.scores)
+    energies = [measure.descriptions[e] for e in scores]
+    weights = [measure.weights[e] for e in scores]
+    atlasParam=AtlasParam("energies"=>energies, "energy weights"=>weights,
                           "districts"=>partition.num_dists)
 
     if haskey(constraints, PopulationConstraint)
@@ -37,7 +39,10 @@ function Writer(
     projdir = "/"*joinpath(split(f, "/")[1:end-1])
     commit = split(read(`git -C $projdir log`, String), "\n")[1]
     commit = replace(commit, "commit "=>"")
+    repository = read(`git -C $projdir config --get remote.origin.url`, String)
+    repository = split(repository, "\n")[1]
     atlasParam["commit"] = commit
+    atlasParam["repository"] = repository
 
     for (key,val) in additional_parameters
         atlasParam[key] = val

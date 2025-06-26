@@ -29,12 +29,12 @@ function run_metropolis_hastings!(
             continue
         end
         p *= get_delta_energy(partition, measure, update)
-        update_acceptance_ratio_diagnostic!(proposal_diagnostics, p)
+        post_step!(proposal_diagnostics, p, partition, measure, writer, update)
 
         if rand(rng) < p
             update_partition!(partition, update)
         end
-        if mod(step, output_freq) == 0 && step != initial_step
+        if mod(step, output_freq) == 0
             output(partition, measure, step, 0, writer, run_diagnostics)
         end
     end
@@ -185,3 +185,19 @@ end
         )
     end
 end
+
+function post_step!(
+    proposal_diagnostics::Union{ProposalDiagnostics, Nothing}, 
+    acceptance_ratio::Float64, 
+    partition::LinkCutPartition, 
+    measure::Measure,
+    writer::Writer,
+    update::Update{T}
+) where T<:Int
+    update_acceptance_ratio_diagnostic!(proposal_diagnostics, acceptance_ratio)
+    # for report_func in values(writer.map_output_data)
+    # for (desc, report_func) in writer.map_output_data
+    #     @show desc, report_func∈measure.scores, report_func
+    # end
+end
+

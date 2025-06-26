@@ -59,6 +59,8 @@ export AbstractGraph,
 
     # mcmc
     run_metropolis_hastings!,
+    
+    # energies/observables
     Measure,
     push_energy!,
     get_log_energy,
@@ -78,6 +80,8 @@ export AbstractGraph,
     build_performant_vra_score,
     build_performant_vra_report,
     get_target_vra_districts,
+    build_get_partisan_margins,
+    build_get_partisan_seats,
 
     get_cut_edge_sum,
     # get_cut_edge_count,
@@ -129,6 +133,7 @@ include("./partition/construct_multi_level_partition.jl")
 include("./partition/link_cut_partition.jl")
 
 include("./measure/constraints/constraints.jl")
+
 include("./measure/measure.jl")
 include("./measure/energy/defaults.jl")
 include("./measure/energy/log_forest_count.jl")
@@ -137,6 +142,7 @@ include("./measure/energy/split_unit_count_by_node.jl")
 include("./measure/energy/performant_vra_dists.jl")
 # include("./measure/energy/mcd_ousted_population.jl")
 # include("./measure/energy/vap_frac.jl")
+
 include("./diagnostics/proposal_diagnostics.jl")
 include("./diagnostics/lifted_cycle_walk_diagnostics.jl")
 include("./diagnostics/delta_population.jl")
@@ -146,6 +152,7 @@ include("./diagnostics/unique_cuttable_edges.jl")
 include("./diagnostics/swappable_pop.jl")
 
 include("./observables/node_counts.jl")
+include("./observables/partisan_lean.jl")
 
 include("./io/AtlasIO.jl")
 include("./io/writer.jl")
