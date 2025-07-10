@@ -70,29 +70,31 @@ function get_log_energy(
 end
 
 # ################################## TO DO: EVERYTHING BELOW SHOULD GO ELSEWHERE
-# """"""
-# function get_cut_edge_count(partition::MultiLevelPartition)
-#     return get_cut_edge_weights(partition, "connections")
-# end
-# """"""
-# function get_cut_edge_perimeter(partition::MultiLevelPartition)
-#     edge_perimeter_col = partition.graph.graphs_by_level[1].edge_perimeter_col
-#     return get_cut_edge_weights(partition, edge_perimeter_col)
-# end
-# """"""
-# function get_cut_edge_sum(
-#     partition::LinkCutPartition;
-#     column::String="connections"
-# )
-#     graph = partition.graph
-#     total = 0
-#     for e in edges(graph.simple_graph)
-#         n1, n2 = src(e), dst(e)
-#         if partition.node_to_dist[n1] == partition.node_to_dist[n2]
-#             continue
-#         end
-#         total += graph.edge_attributes[Set([n1, n2])][column]
-#     end
-#     return total
-# end
+""""""
+function get_cut_edge_count(partition::MultiLevelPartition)
+    return get_cut_edge_weights(partition, "connections")
+end
+
+""""""
+function get_cut_edge_perimeter(partition::MultiLevelPartition)
+    edge_perimeter_col = partition.graph.graphs_by_level[1].edge_perimeter_col
+    return get_cut_edge_weights(partition, edge_perimeter_col)
+end
+
+""""""
+function get_cut_edge_sum(
+    partition::LinkCutPartition;
+    column::String="connections"
+)
+    graph = partition.graph
+    total = 0
+    for e in edges(graph.simple_graph)
+        n1, n2 = src(e), dst(e)
+        if partition.node_to_dist[n1] == partition.node_to_dist[n2]
+            continue
+        end
+        total += graph.edge_attributes[Set([n1, n2])][column]
+    end
+    return total
+end
 
