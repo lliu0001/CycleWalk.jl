@@ -29,7 +29,8 @@ function run_metropolis_hastings!(
             continue
         end
         p *= get_delta_energy(partition, measure, update)
-        post_step!(proposal_diagnostics, p, partition, measure, writer, update)
+        update_acceptance_ratio_diagnostic!(proposal_diagnostics, p)
+        # post_step!(proposal_diagnostics, p, partition, measure, writer, update)
 
         if rand(rng) < p
             update_partition!(partition, update)
