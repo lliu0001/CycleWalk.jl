@@ -1,5 +1,9 @@
+## Run:
+# julia cyclewalk_ct.jl
+
+## Activate the CycleWalk environment  and load necessary packages
 import Pkg
-Pkg.activate("CycleWalkRunner", shared=true)
+Pkg.activate("cycleWalk_env", shared=true)
 using RandomNumbers
 push!(LOAD_PATH, ".."); #if not installed via package manager, point to install path
 using CycleWalk
@@ -17,38 +21,38 @@ cycle_walk_steps = 10^2
 steps = Int(cycle_walk_steps/twocycle_frac)
 outfreq = Int(1000/twocycle_frac)
 
-# build graph
+## build graph
 pctGraphPath = joinpath("ct_data", "CT_pct20.json")
 nodeData = Set(["COUNTY", "NAME", "POP20", "area", "border_length"]);
 graph = build_graph(pctGraphPath, "POP20", "NAME", nodeData;
               area_col="area", node_border_col="border_length", 
               edge_perimeter_col="length")
 
-# build partition
+## build partition
 constraints = initialize_constraints()
 add_constraint!(constraints, PopulationConstraint(graph, num_dists, pop_dev))
 partition = LinkCutPartition(graph, constraints, num_dists; rng=rng, 
                              verbose=true);
 
-# build proposal
+## build proposal
 cycle_walk = build_lifted_tree_cycle_walk(constraints)
 internal_walk = build_internal_forest_walk(constraints)
 proposal = [(twocycle_frac, cycle_walk), 
             (1.0-twocycle_frac, internal_walk)]
 
-# build measure
+## build measure
 measure = Measure()
 push_energy!(measure, get_log_spanning_forests, gamma) 
 push_energy!(measure, get_isoperimetric_score, iso_weight)
 
-# establish output name and path
+## establish output name and path
 atlasName = "cycleWalk_2cyclefrac_"*string(twocycle_frac)
 atlasName *= "_gamma"*string(gamma)
 atlasName *= "_iso"*string(iso_weight)
 atlasName *= ".jsonl.gz" # or just ".jsonl" for an uncompressed output
-output_file_path = joinpath("..", "output", "CT", atlasName)
+output_file_path = joinpath("ct_output", atlasName) # add output directory to path
 
-# establish writer
+## establish writer to which the output will be written
 ad_param = Dict{String, Any}("popdev" => pop_dev) # specific info to write
 writer = Writer(measure, constraints, partition, output_file_path; 
                 additional_parameters=ad_param)
@@ -56,17 +60,17 @@ push_writer!(writer, get_log_spanning_trees)
 push_writer!(writer, get_log_spanning_forests)
 push_writer!(writer, get_isoperimetric_scores)
 
-# optional run diagnostics
+## optional run diagnostics
 # run_diagnostics = RunDiagnostics()
 # push_diagnostic!(run_diagnostics, cycle_walk, AcceptanceRatios(), 
 #                  desc = "cycle_walk")
 # push_diagnostic!(run_diagnostics, cycle_walk, CycleLengthDiagnostic())
 # push_diagnostic!(run_diagnostics, cycle_walk, DeltaNodesDiagnostic())
 
-# run MCMC sampler
+## run MCMC sampler
 println("running mcmc; outputting here: "* output_file_path)
 run_metropolis_hastings!(partition, proposal, measure, steps, rng,
-                         writer=writer, output_freq=outfreq)
-                         # run_diatnostics = run_diatnostics)
-                         
-close_writer(writer)
+                         writer=writer, output_freq=outfreq
+                        #, run_diagnostics = run_diagnostics  ## Uncoment this line to run diagnostics
+)
+close_writer(writer) # close atlas
