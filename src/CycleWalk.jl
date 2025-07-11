@@ -16,9 +16,9 @@ export AbstractGraph,
     modify_edge_weights!,
     #
     MultiLevelGraph,
-    MultiLevelSubGraph,
     MultiLevelPartition,
     edge_weight,
+    build_graph,
 
     # proposals
     build_lifted_tree_cycle_walk,

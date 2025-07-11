@@ -17,7 +17,7 @@ end
 """"""
 function LinkCutPartition(
     partition::MultiLevelPartition,
-    rng::AbstractRNG
+    rng::AbstractRNG=PCG.PCGStateOneseq(UInt64)
 )::LinkCutPartition
     edge_type = edgetype(partition.subgraphs[1].graphs_by_level[1][()])
     edges = Vector{edge_type}(undef, 0)
@@ -54,6 +54,22 @@ function LinkCutPartition(
     assign_district_map!(lcp)
     find_cross_district_edges!(lcp)
     return lcp
+end
+
+""""""
+function LinkCutPartition(
+    graph::MultiLevelGraph, 
+    constraints::Dict{Type{T} where T<:AbstractConstraint, AbstractConstraint},
+    num_dists::U;
+    rng::AbstractRNG=PCG.PCGStateOneseq(UInt64),
+    verbose::Bool=false
+) where U <: Int
+    partition = MultiLevelPartition(graph, constraints, num_dists; 
+                                        rng=rng);
+    if verbose
+        @show collect(keys(partition.district_to_nodes[1]))[1:min(10,end)]
+    end
+    return LinkCutPartition(partition, rng);
 end
 
 """"""
