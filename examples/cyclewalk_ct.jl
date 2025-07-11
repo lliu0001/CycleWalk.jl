@@ -18,7 +18,7 @@ steps = Int(cycle_walk_steps/twocycle_frac)
 outfreq = Int(1000/twocycle_frac)
 
 # build graph
-pctGraphPath = joinpath("example_data", "CT_pct20.json")
+pctGraphPath = joinpath("ct_data", "CT_pct20.json")
 nodeData = Set(["COUNTY", "NAME", "POP20", "area", "border_length"]);
 graph = build_graph(pctGraphPath, "POP20", "NAME", nodeData;
               area_col="area", node_border_col="border_length", 
