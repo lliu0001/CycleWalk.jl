@@ -82,7 +82,6 @@ export AbstractGraph,
     get_target_vra_districts,
     build_get_partisan_margins,
     build_get_partisan_seats,
-
     get_cut_edge_sum,
     # get_cut_edge_count,
     # get_minofracs,
