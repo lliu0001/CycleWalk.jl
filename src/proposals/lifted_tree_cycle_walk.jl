@@ -410,6 +410,7 @@ function lifted_tree_cycle_walk!(
                      # partition.update_identifier+1)
 end
 
+
 """"""
 function build_lifted_tree_cycle_walk(
     constraints::Dict{Type{T} where T<:AbstractConstraint, AbstractConstraint}
@@ -420,3 +421,5 @@ function build_lifted_tree_cycle_walk(
         lifted_tree_cycle_walk!(p, constraints, r; diagnostics=diagnostics)
     return f
 end
+
+build_cycle_walk = build_lifted_tree_cycle_walk

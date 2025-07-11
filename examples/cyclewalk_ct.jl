@@ -5,8 +5,8 @@
 import Pkg
 Pkg.activate("cycleWalk_env", shared=true)
 using RandomNumbers
-push!(LOAD_PATH, ".."); #if not installed via package manager, point to install path
 using CycleWalk
+
 
 twocycle_frac = 0.01
 gamma = 1.0 # 0 is spanning forest measure, 1 is partition
@@ -22,7 +22,7 @@ steps = Int(cycle_walk_steps/twocycle_frac)
 outfreq = Int(1000/twocycle_frac)
 
 ## build graph
-pctGraphPath = joinpath("ct_data", "CT_pct20.json")
+pctGraphPath = joinpath("data","ct","CT_pct20.json")
 nodeData = Set(["COUNTY", "NAME", "POP20", "area", "border_length"]);
 graph = build_graph(pctGraphPath, "POP20", "NAME", nodeData;
               area_col="area", node_border_col="border_length", 
@@ -50,7 +50,7 @@ atlasName = "cycleWalk_2cyclefrac_"*string(twocycle_frac)
 atlasName *= "_gamma"*string(gamma)
 atlasName *= "_iso"*string(iso_weight)
 atlasName *= ".jsonl.gz" # or just ".jsonl" for an uncompressed output
-output_file_path = joinpath("ct_output", atlasName) # add output directory to path
+output_file_path = joinpath("output","ct", atlasName) # add output directory to path
 
 ## establish writer to which the output will be written
 ad_param = Dict{String, Any}("popdev" => pop_dev) # specific info to write

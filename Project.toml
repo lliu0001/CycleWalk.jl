@@ -1,29 +1,19 @@
 name = "CycleWalk"
-uuid = "f1e60ccc-08a2-41db-b5d4-22e81ab96e15"
-authors = ["Gregory Herschlag <gjh@math.duke.edu> and contributors"]
+uuid = "ac9cec89-1413-42d8-a7d6-c246d938c565"
+authors = ["Jonathan Mattingly <jonathan.mattingly@duke.edu>", "Gregory Herschlag <Gregory.Herschlag@duke.edu>"]
 version = "0.1.0"
 
 [deps]
-CodecBzip2 = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
-CodecZlib = "944b1d66-785c-5afd-91f1-9de20f533193"
+AtlasIO = "d44f5655-1c95-40b4-8e53-9bdb5084f5d6"
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 Hungarian = "e91730f6-4275-51fb-a7a0-7064cfbd3b39"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 RandomNumbers = "e6cf234a-135c-5ec9-84dd-332b85af5143"
 SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
-StructTypes = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
-TranscodingStreams = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
 
 [compat]
-julia = "1"
-
-[extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test"]
+julia = "1.10"
