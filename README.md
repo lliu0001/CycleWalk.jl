@@ -40,4 +40,6 @@ julia runCycleWalk_toml.jl toml/param_grid10x10.toml
 ```
 One must be in the `examples` directory to run both of these commands.
 
+
+## CI Tests
 ![pipeline status](https://gitlab.oit.duke.edu/quantifyinggerrymandering/CycleWalk.jl/badges/main/pipeline.svg)
