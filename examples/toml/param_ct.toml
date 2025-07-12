@@ -1,0 +1,29 @@
+[plans]
+pop_dev = 0.02
+num_dists = 6
+node_data=["COUNTY", "NAME", "POP20", "area", "border_length"]
+geo_units=["NAME"]
+pop_col="POP20"
+area_col="area" 
+node_border_col="border_length"
+edge_perimeter_col="length"
+map_directory=["data","ct"]
+map_file="CT_pct20.json"
+
+[measure]
+measure_scores=["get_log_spanning_forests","get_isoperimetric_score"]
+gamma=0.0
+iso_weight=0.0
+
+[mcmc]
+cycle_walk_steps = 1e4
+two_cycle_walk_frac = 0.1
+
+[run]
+thread_id = 1
+atlasNameBase="ct_cycleWalk"
+outputDirectory=["output","ct"]
+cycle_walk_out_freq=100
+writer_stats=["get_isoperimetric_scores","get_log_spanning_trees"]
+compress="gz"
+run_diagnostics=false
