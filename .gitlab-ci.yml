@@ -1,0 +1,14 @@
+image: julia:latest  # Or specify a specific Julia version
+
+stages:
+  - test
+
+before_script:
+  - julia --project=@. -e 'using Pkg; Pkg.instantiate()' # Instantiate project dependencies
+  - julia --project=@. -e 'using Pkg; Pkg.test()' # Run tests
+
+
+test:
+  stage: test
+  script:
+    - julia --project=@. -e 'using Pkg; Pkg.test()'
