@@ -62,9 +62,7 @@ tests = [
     "small_square_p88_weighted", 
     "small_square_p88_polsby_popper", 
     ]
-#@testset "All Tests" begin
-    for t in tests
-        tp = joinpath(testdir, "test_cases/$(t).jl")
-        include(tp)
-    end
-#end
+for t in tests
+    tp = joinpath(testdir, "test_cases/$(t).jl")
+    include(tp)
+end
