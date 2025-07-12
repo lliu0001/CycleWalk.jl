@@ -1,5 +1,14 @@
 image: julia:latest  # Or specify a specific Julia version
 
+cache:
+  key: ${CI_PROJECT_NAME}
+  paths:
+    - .julia/artifacts/
+    - .julia/compiled/
+    - .julia/packages/
+    - .julia/environments/
+    - deps/
+
 stages:
   - test
 
