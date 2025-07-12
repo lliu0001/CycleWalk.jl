@@ -1,4 +1,4 @@
-image: julia:latest  # Or specify a specific Julia version
+image: julia:1.10  # Or specify a specific Julia version
 
 stages:
   - test

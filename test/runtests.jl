@@ -44,6 +44,7 @@ function get_observed_cut_edges(
     return edge_cut_counts
 end 
 
+@test true
 
 small_square_json = joinpath("test_graphs", "4x4pct_2x2cnty.json")
 small_square_node_data = Set(["county", "pct", "pop", "area", "border_length"])
