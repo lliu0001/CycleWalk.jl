@@ -10,7 +10,6 @@ cache:
     - .julia/compiled/
     - .julia/packages/
     - .julia/environments/
-    - deps/
 
 stages:
   - test
