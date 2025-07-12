@@ -4,5 +4,4 @@
 *.jl.mem
 **/.DS_Store
 **/.ipynb_checkpoints
-scripts
-scripts/**
+**/examples/output/**
