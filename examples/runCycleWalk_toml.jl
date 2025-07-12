@@ -149,7 +149,7 @@ end
 println("\n\nRunning CycleWalk with $steps steps, output every $outfreq steps")
 println("Using $two_cycle_walk_frac fraction of two_cycle_walk proposals")
 println("Using $gamma gamma and $iso_weight iso_weight")
-println("Using $num_dists number of distances and $pop_dev population deviation")
+println("Using $num_dists districts and $pop_dev population deviation")
 
 run_metropolis_hastings!(partition, proposal, measure, steps, rng,
                          writer=writer, output_freq=outfreq,run_diagnostics=run_diagnostics);

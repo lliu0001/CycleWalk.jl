@@ -1,6 +1,7 @@
-using Test,Pkg
+
 using CycleWalk
 using RandomNumbers
+using Test
 
 const testdir = dirname(@__FILE__)
 
