@@ -1,7 +1,7 @@
 image: julia:latest  # Or specify a specific Julia version
 
 variables:
-  JULIA_DEPOT_PATH: "${CI_PROJECT_DIR}/"
+  JULIA_DEPOT_PATH: "${CI_PROJECT_DIR}/.julia"
 
 cache:
   key: ${CI_PROJECT_NAME}
