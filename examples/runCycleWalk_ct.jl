@@ -8,7 +8,7 @@ using RandomNumbers
 using CycleWalk
 
 
-twocycle_frac = 0.01
+twocycle_frac = 0.1
 gamma = 1.0 # 0 is spanning forest measure, 1 is partition
 iso_weight = 0.3 # weight on the sum of isoperimetric ratios; i.e. Polsby-Popper
 
@@ -42,8 +42,8 @@ proposal = [(twocycle_frac, cycle_walk),
 
 ## build measure
 measure = Measure()
-push_energy!(measure, get_log_spanning_forests, gamma) 
-push_energy!(measure, get_isoperimetric_score, iso_weight)
+push_energy!(measure, get_log_spanning_forests, gamma) # add spanning forests energy
+push_energy!(measure, get_isoperimetric_score, iso_weight) # add isoperimetric score energy
 
 ## establish output name and path
 atlasName = "cycleWalk_2cyclefrac_"*string(twocycle_frac)
@@ -56,9 +56,9 @@ output_file_path = joinpath("output","ct", atlasName) # add output directory to 
 ad_param = Dict{String, Any}("popdev" => pop_dev) # specific info to write
 writer = Writer(measure, constraints, partition, output_file_path; 
                 additional_parameters=ad_param)
-push_writer!(writer, get_log_spanning_trees)
-push_writer!(writer, get_log_spanning_forests)
-push_writer!(writer, get_isoperimetric_scores)
+push_writer!(writer, get_log_spanning_trees) # add spanning trees count to writer
+push_writer!(writer, get_log_spanning_forests) # add spanning forests count to writer
+push_writer!(writer, get_isoperimetric_scores) # add isoperimetric scores to writer
 
 ## optional run diagnostics
 # run_diagnostics = RunDiagnostics()
