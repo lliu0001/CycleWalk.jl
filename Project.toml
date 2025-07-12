@@ -17,3 +17,9 @@ SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
 
 [compat]
 julia = "1.10"
+
+[extras]
+Test = "Test"
+
+[targets]
+test = ["Test"]
