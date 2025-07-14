@@ -12,10 +12,10 @@ using RandomNumbers
 using CycleWalk
 
 using UnPack, TOML, ArgMacros
-include("runtimeParameters.jl") # see this file for parsing commandline args
-                                # and passed toml data
+include("runtimeParameters.jl") # see this file for parsing commandline args and passed toml data. 
+                                # It also set some variables derived from the toml data or commandline args
 
-#node_data = Set(["COUNTY", "NAME", "POP20", "area", "border_length"]);
+
 base_graph = BaseGraph(pctGraphPath, pop_col, inc_node_data=node_data,
                        area_col=area_col, node_border_col=node_border_col, 
                        edge_perimeter_col=edge_perimeter_col)
@@ -54,8 +54,6 @@ for stat in writer_stats
     fnct = getfield(LiftedTreeWalk, Symbol(stat))
     push_writer!(writer, fnct)
 end
-# push_writer!(writer, get_log_spanning_forests)
-# push_writer!(writer, get_isoperimetric_scores)
 
 run_diagnostics = RunDiagnostics()
 
