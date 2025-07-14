@@ -1,6 +1,6 @@
 [plans]
 pop_dev = 0.02
-num_dists = 6
+num_dists = 5
 node_data=["COUNTY", "NAME", "POP20", "area", "border_length"]
 geo_units=["NAME"]
 pop_col="POP20"
