@@ -80,7 +80,7 @@ ad_param = Dict{String, Any}(
     "popdev" => pop_dev
 )
 
-atlasName = atlasNameBase*"_thread"*string(thread_id)*"_cyclewalkVS_2treeCycleWalk_"*string(two_cycle_walk_frac)
+atlasName = atlasNameBase*"_thread"*string(thread_id)*"_cycleWalkVS_2treeCycleWalk_"*string(two_cycle_walk_frac)
 if gamma > 0; atlasName *="_gamma"*string(gamma) end
 if iso_weight > 0; atlasName *="_iso"*string(iso_weight) end
 atlasName *= ".jsonl"*compress
