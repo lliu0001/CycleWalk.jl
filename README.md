@@ -1,6 +1,6 @@
 # CycleWalk.jl
 
-[![Tests ](https://github.com/jonmjonm/CycleWalk.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/jonmjonm/CycleWalk.jl/actions/workflows/ci.yml) 
+[![Test CI](https://github.com/jonmjonm/CycleWalk.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/jonmjonm/CycleWalk.jl/actions/workflows/ci.yml)
 
 This repository contains Julia code the run the Metropolized Cycle Walk algorithm which is used to sample a used specified distribution on the space of political redistricting plans. This MCMC algorithm is used to create ensemble of redistricting plans that can be used to analyze the impact of different redistricting plans on electoral outcomes. 
 
