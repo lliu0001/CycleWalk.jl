@@ -24,11 +24,11 @@ The `examples` directory contains example scripts that demonstrate how to use th
 
 ### Basic Usage
 
-The script ['examples/runCycleWalk_ct.jl']("./examples/runCycleWalk_ct.jl") gives a simple example of how to run the Metropolized Cycle Walk algorithm. It creates an ensemble of congressional redistricting plans for Connecticut using the Cycle Walk algorithm with a target measure that includes a spanning forest energy and an isoperimetric score energy.
+The script [`examples/runCycleWalk_ct.jl`](./examples/runCycleWalk_ct.jl) gives a simple example of how to run the Metropolized Cycle Walk algorithm. It creates an ensemble of congressional redistricting plans for Connecticut using the Cycle Walk algorithm with a target measure that includes a spanning forest energy and an isoperimetric score energy.
 
 ### A general run script with configuration file
 
-The script ['examples/runCycleWalk_toml.jl']("./examples/runCycleWalk_toml.jl") demonstrates how to run the Cycle Walk algorithm with parameters specified in a TOML configuration file. This allows for easy customization of the algorithm's parameters without modifying the script itself.
+The script [`examples/runCycleWalk_toml.jl`](./examples/runCycleWalk_toml.jl) demonstrates how to run the Cycle Walk algorithm with parameters specified in a TOML configuration file. This allows for easy customization of the algorithm's parameters without modifying the script itself.
 
 There are a number of example TOML files in the `examples/toml` directory that can be used to run the script. 
 
