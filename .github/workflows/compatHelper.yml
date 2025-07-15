@@ -1,0 +1,19 @@
+name: compatHelper
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # runs daily
+  workflow_dispatch:
+
+jobs:
+  CompatHelper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1'  # or latest stable
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-runtest@v1
+      - name: Run CompatHelper
+        uses: julia-actions/compathelper-action@v1
