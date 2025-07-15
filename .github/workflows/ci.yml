@@ -1,4 +1,4 @@
-name: CI
+name: Julia CI
 
 on:
   push:
@@ -11,26 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Julia
-        uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.9' # Adjust as needed
+          version: '1.9' # <-- Or your preferred Julia version
 
-      - name: Cache Julia deps
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.julia/artifacts
-            ~/.julia/compiled
-            ~/.julia/environments
-            ~/.julia/packages
-          key: ${{ runner.os }}-julia-${{ hashFiles('cycleWalk_env/Project.toml', 'cycleWalk_env/Manifest.toml') }}
-
-      - name: Install Julia dependencies
-        run: julia --project=cycleWalk_env -e 'import Pkg; Pkg.instantiate()'
+      - name: Install dependencies
+        run: julia -e 'import Pkg; Pkg.instantiate()'
 
       - name: Run tests
-        run: julia --project=cycleWalk_env -e 'import Pkg; Pkg.test()'
+        run: julia -e 'import Pkg; Pkg.test()'
