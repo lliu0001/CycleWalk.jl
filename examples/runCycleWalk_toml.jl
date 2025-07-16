@@ -30,8 +30,8 @@ initial_partition = MultiLevelPartition(graph, constraints, num_dists;
 
 partition = LinkCutPartition(initial_partition, rng);
 
-cycle_walk = build_lifted_tree_cycle_walk(constraints)
-internal_walk = build_internal_forest_walk(constraints)
+cycle_walk = build_two_tree_cycle_walk(constraints)
+internal_walk = build_one_tree_cycle_walk(constraints)
 proposal = [(two_cycle_walk_frac, cycle_walk), 
             (1.0-two_cycle_walk_frac, internal_walk)]
 

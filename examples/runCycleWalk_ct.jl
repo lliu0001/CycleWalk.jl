@@ -35,8 +35,8 @@ partition = LinkCutPartition(graph, constraints, num_dists; rng=rng,
                              verbose=true);
 
 ## build proposal
-cycle_walk = build_lifted_tree_cycle_walk(constraints)
-internal_walk = build_internal_forest_walk(constraints)
+cycle_walk = build_two_tree_cycle_walk(constraints)
+internal_walk = build_one_tree_cycle_walk(constraints)
 proposal = [(twocycle_frac, cycle_walk), 
             (1.0-twocycle_frac, internal_walk)]
 

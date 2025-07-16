@@ -23,8 +23,10 @@ export AbstractGraph,
     build_graph,
 
     # proposals
-    build_lifted_tree_cycle_walk,
+    build_one_tree_cycle_walk,
+    build_two_tree_cycle_walk,
     build_cycle_walk,
+    build_lifted_tree_cycle_walk,
     build_internal_forest_walk,
 
     # constraints

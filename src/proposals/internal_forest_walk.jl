@@ -95,3 +95,5 @@ function build_internal_forest_walk(
                                                         diagnostics=diagnostics)
     return f
 end
+
+const build_one_tree_cycle_walk = build_internal_forest_walk
