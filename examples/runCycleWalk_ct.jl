@@ -3,7 +3,7 @@
 
 ## Activate the CycleWalk environment and load necessary packages
 import Pkg
-Pkg.activate("cycleWalk_env", shared=true)
+Pkg.activate("Users/lliu001/.julia/dev/CycleWalk")
 Pkg.instantiate()
 
 using RandomNumbers
