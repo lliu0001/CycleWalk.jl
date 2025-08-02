@@ -2,7 +2,7 @@
 # julia runCycleWalk_ct.jl
 
 ## Activate the CycleWalk environment and load necessary packages
-using Pkg
+import Pkg
 Pkg.activate("cycleWalk_env", shared=true)
 Pkg.instantiate()
 
