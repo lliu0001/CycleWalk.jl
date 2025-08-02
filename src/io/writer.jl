@@ -37,7 +37,7 @@ function Writer(
     end
 
     f = @__FILE__
-    projdir = "/Users/lliu001/.julia/dev/CycleWalk/src"
+    projdir = "/"*joinpath(split(f, "/")[1:end-1])
     commit = split(read(`git -C $projdir log`, String), "\n")[1]
     commit = replace(commit, "commit "=>"")
     repository = read(`git -C $projdir config --get remote.origin.url`, String)
