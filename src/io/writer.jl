@@ -38,19 +38,9 @@ function Writer(
 
     f = @__FILE__
     projdir = "/"*joinpath(split(f, "/")[1:end-1])
-    # try # would like to save the git commit for reporducibility, but the 
-          # pkg manager doesn't upload the git; to fix, put a hidden text file
-          # with this information and read from it and update when in dev/tesing
-          # maybe in module
-    #     commit = split(read(`git -C $projdir log`, String), "\n")[1]
-    #     commit = replace(commit, "commit "=>"")
-    #     repository = read(`git -C $projdir config --get remote.origin.url`, 
-    #                       String)
-    #     repository = split(repository, "\n")[1]
-    #     atlasParam["commit"] = commit
-    #     atlasParam["repository"] = repository
-    # catch 
-    # end
+    versionNumber = pkgversion(CycleWalk)
+    versionString = string(versionNumber)
+    atlasParam["package.version"] = "CycleWalk v"*versionString
 
     for (key,val) in additional_parameters
         atlasParam[key] = val
