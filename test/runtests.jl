@@ -62,7 +62,9 @@ tests = [
     "small_square_p88_weighted", 
     "small_square_p88_polsby_popper", 
     ]
-for t in tests
-    tp = joinpath(testdir, "test_cases/$(t).jl")
-    include(tp)
-end
+@testset verbose = true "CycleWalk Tests" begin
+    for t in tests
+        tp = joinpath(testdir, "test_cases/$(t).jl")
+        include(tp)
+    end
+end;
