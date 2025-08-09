@@ -6,7 +6,8 @@
 # julia runCycleWalk_toml.jl toml/param_grid4x4.toml --thread_id 200 --two_cycle_walk_frac .1 --cycle_walk_steps 1e4
 
 import Pkg
-Pkg.activate("cycleWalk_env", shared=true)
+Pkg.activate("./runCycleWalkEnv")
+Pkg.instantiate()
 
 using RandomNumbers
 using CycleWalk
