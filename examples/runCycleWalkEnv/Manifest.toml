@@ -2,7 +2,13 @@
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "dd6c78caea1e0eea85d4db8c3aa23598cc2ba270"
+project_hash = "8195749a61ea82ecec614f1e84cd9217b3d7902f"
+
+[[deps.ArgMacros]]
+deps = ["TextWrap"]
+git-tree-sha1 = "d56b520cf879f431c0164fd05197efcf754e13bb"
+uuid = "dbc42088-9de8-42a0-8ec8-2cd114e1ea3e"
+version = "0.2.4"
 
 [[deps.ArnoldiMethod]]
 deps = ["LinearAlgebra", "Random", "StaticArrays"]
@@ -276,6 +282,11 @@ deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
 
+[[deps.TextWrap]]
+git-tree-sha1 = "43044b737fa70bc12f6105061d3da38f881a3e3c"
+uuid = "b718987f-49a8-5099-9789-dcd902bef87d"
+version = "1.0.2"
+
 [[deps.TranscodingStreams]]
 git-tree-sha1 = "0c45878dcfdcfa8480052b6ab162cdd138781742"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
@@ -285,6 +296,11 @@ version = "0.11.3"
 deps = ["Random", "SHA"]
 uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 version = "1.11.0"
+
+[[deps.UnPack]]
+git-tree-sha1 = "387c1f73762231e86e0c9c5443ce3b4a0a9a0c2b"
+uuid = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
+version = "1.0.2"
 
 [[deps.Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
