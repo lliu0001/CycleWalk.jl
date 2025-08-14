@@ -1,7 +1,7 @@
 ## Run:
 # julia runCycleWalk_ct.jl
 
-## Activate the CycleWalk environment  and load necessary packages
+## Activate the CycleWalk environment and load necessary packages
 import Pkg
 Pkg.activate("./runCycleWalkEnv")
 Pkg.instantiate()
@@ -9,52 +9,53 @@ Pkg.instantiate()
 using RandomNumbers
 using CycleWalk
 
-
-twocycle_frac = 0.1
+## Establish parameters
+twocycle_frac = 0.1 #Fraction of steps using two-tree cycle walk 
 gamma = 1.0 # 0 is spanning forest measure, 1 is partition
-iso_weight = 0.3 # weight on the sum of isoperimetric ratios; i.e. Polsby-Popper
+iso_weight = 0.3 # Weight on the sum of isoperimetric ratios; i.e. Polsby-Popper
 
 @assert 0 ≤ twocycle_frac ≤ 1
 
-num_dists = 5
+num_dists = 9 #Number of districts 
 rng = PCG.PCGStateOneseq(UInt64, 4541901234)
-pop_dev = 0.02 # population deviation (fraction from ideal)
+pop_dev = 0.02 #Population deviation allowed (fraction from ideal)
 cycle_walk_steps = 10^2
 steps = Int(cycle_walk_steps/twocycle_frac)
 outfreq = Int(1000/twocycle_frac)
 
-## build graph
-pctGraphPath = joinpath("/Users/lliu001/Desktop/CycleWalk.jl/examples/data/ct/CT_pct20.json")
-nodeData = Set(["COUNTY", "NAME", "POP20", "area", "border_length"]);
-graph = build_graph(pctGraphPath, "POP20", "NAME", nodeData;
-              area_col="area", node_border_col="border_length", 
-              edge_perimeter_col="length")
+## Build graph of Connecticut (see CT_pct20.json file for individual nodes)
+# pctGraphPath = joinpath("data","ct","CT_pct20.json") #Joins as data/ct/CT_pct20.json
+pctGraphPath = "/Users/lliu001/Desktop/CycleWalk.jl/examples/data/tx/graph_DFW.json"
+nodeData = Set(["county", "id", "total", "area", "boundary_perim"]); #Encode data of each node (corresponding to a precinct/county, etc.)
+graph = build_graph(pctGraphPath, "total", "id", nodeData; #Specifies parameters for node weight, label, & metadata (nodeData)
+              area_col="area", node_border_col="boundary_perim", #Specify which column to use for each parameter (includes perimeter of each node/precinct)
+              edge_perimeter_col="shared_perim") #Each edge connects two adjacent precincts
 
-## build partition
+## Build partition of districts
 constraints = initialize_constraints()
-add_constraint!(constraints, PopulationConstraint(graph, num_dists, pop_dev))
+add_constraint!(constraints, PopulationConstraint(graph, num_dists, pop_dev)) #Districts can't deviate from ideal population by a certain amount
 partition = LinkCutPartition(graph, constraints, num_dists; rng=rng, 
                              verbose=true);
 
-## build proposal
+## Build proposal
 cycle_walk = build_two_tree_cycle_walk(constraints)
 internal_walk = build_one_tree_cycle_walk(constraints)
 proposal = [(twocycle_frac, cycle_walk), 
             (1.0-twocycle_frac, internal_walk)]
 
-## build measure
+## Build measure
 measure = Measure()
 push_energy!(measure, get_log_spanning_forests, gamma) # add spanning forests energy
 push_energy!(measure, get_isoperimetric_score, iso_weight) # add isoperimetric score energy
 
-## establish output name and path
+## Establish output name and path
 atlasName = "cycleWalk_2cyclefrac_"*string(twocycle_frac)
 atlasName *= "_gamma"*string(gamma)
 atlasName *= "_iso"*string(iso_weight)
 atlasName *= ".jsonl.gz" # or just ".jsonl" for an uncompressed output
-output_file_path = joinpath("/Users/lliu001/Desktop/CycleWalk.jl/output") # add output directory to path
+output_file_path = joinpath("/Users/lliu001/Desktop/CycleWalk.jl/output","tx", atlasName) # add output directory to path
 
-## establish writer to which the output will be written
+## Establish writer to which the output will be written
 ad_param = Dict{String, Any}("popdev" => pop_dev) # specific info to write
 writer = Writer(measure, constraints, partition, output_file_path; 
                 additional_parameters=ad_param)
